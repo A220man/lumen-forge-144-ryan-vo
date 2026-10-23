@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "lumen-forge-144-ryan-vo",
+  "owner": "A220man",
+  "email": "ryandtvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "summary": "Work in progress: lumen-forge-144-ryan-vo",
+  "workflows": [
+    "Add and validate video sources with DNS-pinned SSRF protection",
+    "Play video streams with persistent mobile controls and correct poster aspect ratios",
+    "Search and browse content across multiple configured sources"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "status": "work-in-progress"
+}
