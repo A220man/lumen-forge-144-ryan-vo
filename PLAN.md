@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-skeleton
+auth
 
 ## Roadmap
 
@@ -24,7 +24,7 @@ Tests: `backend/tests/test_health.py`, `frontend/src/__tests__/App.test.tsx`
 
 ### auth — OIDC Keycloak authentication with SPA PKCE flow
 
-Status: planned
+Status: in_progress
 
 Acceptance:
 - Login redirects to Keycloak
@@ -32,6 +32,10 @@ Acceptance:
 - Access token stored in memory, not localStorage
 - Protected API endpoints require valid token
 - Logout clears session and redirects to Keycloak logout
+
+Implementation: `backend/app/models/auth.py`, `backend/app/services/auth.py`, `backend/app/api/auth.py`, `backend/tests/test_auth.py`, `frontend/src/api/auth.ts`, `frontend/src/App.tsx`, `frontend/src/__tests__/App.test.tsx`
+
+Tests: `backend/tests/test_auth.py`, `frontend/src/__tests__/App.test.tsx`
 
 ### source-management — Video source CRUD with SSRF-protected fetch
 

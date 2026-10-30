@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import App from '../App'
 
@@ -7,6 +7,13 @@ import App from '../App'
 vi.mock('../api/client', () => ({
   apiClient: {
     get: vi.fn().mockResolvedValue({ status: 'ok', service: 'lumen-forge' }),
+  },
+}))
+
+// Mock the auth API
+vi.mock('../api/auth', () => ({
+  authApi: {
+    getMe: vi.fn().mockRejectedValue(new Error('Not authenticated')),
   },
 }))
 
@@ -19,4 +26,13 @@ describe('App', () => {
     await screen.findByText('ok')
     expect(screen.getByText('lumen-forge')).toBeInTheDocument()
   })
+
+  it('shows not authenticated state', async () => {
+    render(<App />)
+    await waitFor(() => {
+      expect(screen.getByText('Not authenticated')).toBeInTheDocument()
+    })
+    expect(screen.getByText('Login with Keycloak')).toBeInTheDocument()
+  })
 })
+

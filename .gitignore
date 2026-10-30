@@ -43,3 +43,4 @@ Thumbs.db
 # Test artifacts
 coverage/
 htmlcov/
+venv/

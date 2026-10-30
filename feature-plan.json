@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_feature": "skeleton",
+  "current_feature": "auth",
   "features": [
     {
       "id": "skeleton",
@@ -42,7 +42,7 @@
     {
       "id": "auth",
       "title": "OIDC Keycloak authentication with SPA PKCE flow",
-      "status": "planned",
+      "status": "in_progress",
       "acceptance": [
         "Login redirects to Keycloak",
         "Callback exchanges code for tokens with PKCE",
@@ -50,8 +50,19 @@
         "Protected API endpoints require valid token",
         "Logout clears session and redirects to Keycloak logout"
       ],
-      "implementation": [],
-      "tests": []
+      "implementation": [
+        "backend/app/models/auth.py",
+        "backend/app/services/auth.py",
+        "backend/app/api/auth.py",
+        "backend/tests/test_auth.py",
+        "frontend/src/api/auth.ts",
+        "frontend/src/App.tsx",
+        "frontend/src/__tests__/App.test.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_auth.py",
+        "frontend/src/__tests__/App.test.tsx"
+      ]
     },
     {
       "id": "source-management",

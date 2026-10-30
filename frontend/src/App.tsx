@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { apiClient } from './api/client'
+import { authApi, UserInfo } from './api/auth'
 
 interface HealthResponse {
   status: string
@@ -8,8 +9,10 @@ interface HealthResponse {
 
 function App() {
   const [health, setHealth] = useState<HealthResponse | null>(null)
+  const [user, setUser] = useState<UserInfo | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [authLoading, setAuthLoading] = useState(true)
 
   useEffect(() => {
     async function fetchHealth() {
@@ -25,7 +28,34 @@ function App() {
     fetchHealth()
   }, [])
 
-  if (loading) {
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const userData = await authApi.getMe()
+        setUser(userData)
+      } catch {
+        // Not authenticated, that's fine
+      } finally {
+        setAuthLoading(false)
+      }
+    }
+    checkAuth()
+  }, [])
+
+  const handleLogin = () => {
+    authApi.login()
+  }
+
+  const handleLogout = async () => {
+    try {
+      await authApi.logout()
+      setUser(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Logout failed')
+    }
+  }
+
+  if (loading || authLoading) {
     return <div style={styles.container}>Loading...</div>
   }
 
@@ -54,6 +84,30 @@ function App() {
               <dt>Service</dt>
               <dd>{health.service}</dd>
             </dl>
+          )}
+        </section>
+
+        <section style={styles.card}>
+          <h2>Authentication</h2>
+          {user ? (
+            <div>
+              <dl style={styles.dl}>
+                <dt>User</dt>
+                <dd>{user.preferred_username}</dd>
+                <dt>Email</dt>
+                <dd>{user.email || 'N/A'}</dd>
+                <dt>Name</dt>
+                <dd>{user.name || 'N/A'}</dd>
+                <dt>Roles</dt>
+                <dd>{user.roles.join(', ') || 'None'}</dd>
+              </dl>
+              <button onClick={handleLogout} style={styles.button}>Logout</button>
+            </div>
+          ) : (
+            <div>
+              <p>Not authenticated</p>
+              <button onClick={handleLogin} style={styles.button}>Login with Keycloak</button>
+            </div>
           )}
         </section>
       </main>
@@ -104,6 +158,17 @@ const styles: Record<string, React.CSSProperties> = {
     borderTop: '1px solid #e0e0e0',
     marginTop: 'auto',
   },
+  button: {
+    marginTop: '1rem',
+    padding: '0.75rem 1.5rem',
+    backgroundColor: '#1976d2',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '1rem',
+  },
 }
 
 export default App
+
