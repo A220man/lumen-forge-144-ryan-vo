@@ -18,9 +18,18 @@ security = HTTPBearer(auto_error=False)
 
 
 async def get_current_user(
+    request: Request,
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> UserInfo:
-    if credentials is None:
+    # Try to get token from Authorization header first
+    token = None
+    if credentials:
+        token = credentials.credentials
+    # Fall back to cookie
+    if token is None:
+        token = request.cookies.get("access_token")
+
+    if token is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Not authenticated",
@@ -28,7 +37,7 @@ async def get_current_user(
         )
 
     try:
-        user = await auth_service.validate_token(credentials.credentials)
+        user = await auth_service.validate_token(token)
         return user
     except ValueError as e:
         raise HTTPException(
