@@ -48,8 +48,10 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      await authApi.logout()
+      const result = await authApi.logout()
       setUser(null)
+      // Redirect to Keycloak logout
+      window.location.href = result.logout_url
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Logout failed')
     }

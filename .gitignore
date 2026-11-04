@@ -44,3 +44,12 @@ Thumbs.db
 coverage/
 htmlcov/
 venv/
+.turbo/
+**/data/media/
+*.pyc
+*.db-wal
+*.db-shm
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite3-wal
+*.sqlite3-shm
