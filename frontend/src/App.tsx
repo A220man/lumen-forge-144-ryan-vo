@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { apiClient } from './api/client'
 import { authApi, UserInfo } from './api/auth'
+import Callback from './Callback'
 
 interface HealthResponse {
   status: string
   service: string
 }
 
-function App() {
+function AppContent() {
   const [health, setHealth] = useState<HealthResponse | null>(null)
   const [user, setUser] = useState<UserInfo | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -120,6 +122,18 @@ function App() {
   )
 }
 
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<AppContent />} />
+        <Route path="/callback" element={<Callback />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
+  )
+}
+
 const styles: Record<string, React.CSSProperties> = {
   container: {
     minHeight: '100vh',
@@ -173,4 +187,3 @@ const styles: Record<string, React.CSSProperties> = {
 }
 
 export default App
-

@@ -33,7 +33,7 @@ Acceptance:
 - Protected API endpoints require valid token
 - Logout clears session and redirects to Keycloak logout
 
-Implementation: `backend/app/models/auth.py`, `backend/app/services/auth.py`, `backend/app/api/auth.py`, `backend/tests/test_auth.py`, `frontend/src/api/auth.ts`, `frontend/src/App.tsx`, `frontend/src/__tests__/App.test.tsx`
+Implementation: `backend/app/models/auth.py`, `backend/app/services/auth.py`, `backend/app/api/auth.py`, `backend/tests/test_auth.py`, `frontend/src/api/auth.ts`, `frontend/src/App.tsx`, `frontend/src/Callback.tsx`, `frontend/src/__tests__/App.test.tsx`
 
 Tests: `backend/tests/test_auth.py`, `frontend/src/__tests__/App.test.tsx`
 

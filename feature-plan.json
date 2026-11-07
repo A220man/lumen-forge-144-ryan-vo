@@ -57,6 +57,7 @@
         "backend/tests/test_auth.py",
         "frontend/src/api/auth.ts",
         "frontend/src/App.tsx",
+        "frontend/src/Callback.tsx",
         "frontend/src/__tests__/App.test.tsx"
       ],
       "tests": [
