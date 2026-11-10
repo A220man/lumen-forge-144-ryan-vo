@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_feature": "auth",
+  "current_feature": "source-management",
   "features": [
     {
       "id": "skeleton",
@@ -68,15 +68,28 @@
     {
       "id": "source-management",
       "title": "Video source CRUD with SSRF-protected fetch",
-      "status": "planned",
+      "status": "done",
       "acceptance": [
         "Create/list/update/delete video sources",
         "DNS-pinned fetch prevents SSRF via DNS rebinding",
         "Source test endpoint validates connectivity",
         "Pagination and filtering on list endpoint"
       ],
-      "implementation": [],
-      "tests": []
+      "implementation": [
+        "backend/app/models/source.py",
+        "backend/app/models/db.py",
+        "backend/app/services/source.py",
+        "backend/app/api/sources.py",
+        "backend/app/db/session.py",
+        "backend/tests/test_sources.py",
+        "frontend/src/api/sources.ts",
+        "frontend/src/Sources.tsx",
+        "frontend/src/App.tsx"
+      ],
+      "tests": [
+        "backend/tests/test_sources.py",
+        "frontend/src/__tests__/App.test.tsx"
+      ]
     },
     {
       "id": "playback",

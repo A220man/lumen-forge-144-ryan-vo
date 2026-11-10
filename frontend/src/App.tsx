@@ -1,12 +1,36 @@
 import { useEffect, useState } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom'
 import { apiClient } from './api/client'
 import { authApi, UserInfo } from './api/auth'
 import Callback from './Callback'
+import { SourcesPage } from './Sources'
 
 interface HealthResponse {
   status: string
   service: string
+}
+
+function Navigation({ user, onLogout }: { user: UserInfo | null; onLogout: () => void }) {
+  const location = useLocation()
+  
+  return (
+    <nav style={styles.nav}>
+      <Link to="/" style={styles.navLink}>Home</Link>
+      {user && <Link to="/sources" style={styles.navLink}>Sources</Link>}
+      <div style={{ marginLeft: 'auto', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        {user ? (
+          <span style={styles.userInfo}>{user.preferred_username}</span>
+        ) : (
+          ''
+        )}
+        {user ? (
+          <button onClick={onLogout} style={styles.navButton}>Logout</button>
+        ) : (
+          <Link to="/login" style={styles.navButton}>Login</Link>
+        )}
+      </div>
+    </nav>
+  )
 }
 
 function AppContent() {
@@ -74,10 +98,7 @@ function AppContent() {
 
   return (
     <div style={styles.container}>
-      <header style={styles.header}>
-        <h1>Lumen Forge</h1>
-        <p>AI/ML Developer Tools - Video Source Management</p>
-      </header>
+      <Navigation user={user} onLogout={handleLogout} />
       <main style={styles.main}>
         <section style={styles.card}>
           <h2>System Health</h2>
@@ -105,7 +126,6 @@ function AppContent() {
                 <dt>Roles</dt>
                 <dd>{user.roles.join(', ') || 'None'}</dd>
               </dl>
-              <button onClick={handleLogout} style={styles.button}>Logout</button>
             </div>
           ) : (
             <div>
@@ -122,12 +142,67 @@ function AppContent() {
   )
 }
 
+function SourcesWrapper() {
+  const [user, setUser] = useState<UserInfo | null>(null)
+  const [authLoading, setAuthLoading] = useState(true)
+
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const userData = await authApi.getMe()
+        setUser(userData)
+      } catch {
+        // Not authenticated
+      } finally {
+        setAuthLoading(false)
+      }
+    }
+    checkAuth()
+  }, [])
+
+  const handleLogout = async () => {
+    try {
+      const result = await authApi.logout()
+      setUser(null)
+      window.location.href = result.logout_url
+    } catch (err) {
+      console.error('Logout failed:', err)
+    }
+  }
+
+  if (authLoading) {
+    return <div style={styles.container}>Loading...</div>
+  }
+
+  if (!user) {
+    return (
+      <div style={styles.container}>
+        <Navigation user={null} onLogout={handleLogout} />
+        <div style={styles.card}>
+          <h2>Authentication Required</h2>
+          <p>Please log in to access video sources.</p>
+          <button onClick={handleLogin} style={styles.button}>Login with Keycloak</button>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={styles.container}>
+      <Navigation user={user} onLogout={handleLogout} />
+      <SourcesPage onBack={() => window.history.back()} />
+    </div>
+  )
+}
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AppContent />} />
         <Route path="/callback" element={<Callback />} />
+        <Route path="/sources" element={<SourcesWrapper />} />
+        <Route path="/login" element={<AppContent />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
@@ -140,16 +215,37 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     flexDirection: 'column',
   },
-  header: {
-    padding: '2rem 1rem',
-    textAlign: 'center',
+  nav: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '1rem',
+    padding: '1rem 2rem',
     backgroundColor: '#fff',
     borderBottom: '1px solid #e0e0e0',
+  },
+  navLink: {
+    color: '#1976d2',
+    textDecoration: 'none',
+    fontWeight: 500,
+    padding: '0.5rem 0',
+  },
+  navButton: {
+    padding: '0.5rem 1rem',
+    backgroundColor: '#1976d2',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    textDecoration: 'none',
+  },
+  userInfo: {
+    color: '#666',
+    fontSize: '0.9rem',
   },
   main: {
     flex: 1,
     padding: '2rem 1rem',
-    maxWidth: '800px',
+    maxWidth: '1200px',
     width: '100%',
     margin: '0 auto',
   },
@@ -158,6 +254,7 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: '8px',
     padding: '1.5rem',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    marginBottom: '1.5rem',
   },
   dl: {
     display: 'grid',

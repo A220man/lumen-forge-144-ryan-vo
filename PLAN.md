@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-auth
+source-management
 
 ## Roadmap
 
@@ -39,13 +39,17 @@ Tests: `backend/tests/test_auth.py`, `frontend/src/__tests__/App.test.tsx`
 
 ### source-management — Video source CRUD with SSRF-protected fetch
 
-Status: planned
+Status: done
 
 Acceptance:
 - Create/list/update/delete video sources
 - DNS-pinned fetch prevents SSRF via DNS rebinding
 - Source test endpoint validates connectivity
 - Pagination and filtering on list endpoint
+
+Implementation: `backend/app/models/source.py`, `backend/app/models/db.py`, `backend/app/services/source.py`, `backend/app/api/sources.py`, `backend/app/db/session.py`, `backend/tests/test_sources.py`, `frontend/src/api/sources.ts`, `frontend/src/Sources.tsx`, `frontend/src/App.tsx`
+
+Tests: `backend/tests/test_sources.py`, `frontend/src/__tests__/App.test.tsx`
 
 ### playback — Video playback with mobile-friendly controls
 
