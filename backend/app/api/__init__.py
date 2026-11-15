@@ -1,3 +1,3 @@
-from app.api import health, auth, sources
+from app.api import health, auth, sources, playback
 
-__all__ = ["health", "auth", "sources"]
+__all__ = ["health", "auth", "sources", "playback"]

@@ -2,7 +2,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import health, auth, sources
+from app.api import health, auth, sources, playback
 from app.core.config import settings
 from app.db.session import init_db
 
@@ -33,6 +33,7 @@ def create_app() -> FastAPI:
     app.include_router(health.router, prefix="/api", tags=["health"])
     app.include_router(auth.router, prefix="/api", tags=["auth"])
     app.include_router(sources.router, prefix="/api", tags=["sources"])
+    app.include_router(playback.router, prefix="/api", tags=["playback"])
 
     return app
 
