@@ -1,6 +1,6 @@
 [project]
 name = "lumen-forge"
-version = "1.0.0"
+version = "1.5.0"
 description = "AI/ML Developer Tools - Video Source Management Platform"
 readme = "README.md"
 license = {text = "MIT"}
