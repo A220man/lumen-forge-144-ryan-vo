@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_feature": "source-management",
+  "current_feature": "playback",
   "features": [
     {
       "id": "skeleton",
@@ -94,15 +94,21 @@
     {
       "id": "playback",
       "title": "Video playback with mobile-friendly controls",
-      "status": "planned",
+      "status": "in_progress",
       "acceptance": [
         "Video player loads and plays HLS/DASH streams",
         "Controls persist on mobile (no 3s auto-hide)",
         "Picture-in-picture support",
         "Poster image displays with correct aspect ratio"
       ],
-      "implementation": [],
-      "tests": []
+      "implementation": [
+        "backend/app/api/playback.py",
+        "backend/tests/test_playback.py",
+        "frontend/src/api/playback.ts"
+      ],
+      "tests": [
+        "backend/tests/test_playback.py"
+      ]
     },
     {
       "id": "search-browse",

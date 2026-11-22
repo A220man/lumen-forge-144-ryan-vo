@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-source-management
+playback
 
 ## Roadmap
 
@@ -53,13 +53,17 @@ Tests: `backend/tests/test_sources.py`, `frontend/src/__tests__/App.test.tsx`
 
 ### playback — Video playback with mobile-friendly controls
 
-Status: planned
+Status: in_progress
 
 Acceptance:
 - Video player loads and plays HLS/DASH streams
 - Controls persist on mobile (no 3s auto-hide)
 - Picture-in-picture support
 - Poster image displays with correct aspect ratio
+
+Implementation: `backend/app/api/playback.py`, `backend/tests/test_playback.py`, `frontend/src/api/playback.ts`
+
+Tests: `backend/tests/test_playback.py`
 
 ### search-browse — Search and browse workflows
 

@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.6.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
+## 1.5.1 — work-in-progress checkpoint
+
+### Added
+- Video playback API endpoint with HLS/DASH stream support
+- Playback info response including stream URL, type, and poster image
+- Updated playback tests verifying 200 response with playback configuration
+- Playback feature moved from planned to in_progress
+
+### Changed
+- backend/app/api/playback.py: implemented router with /playback/{source_id} endpoint
+- backend/tests/test_playback.py: updated tests to verify playback info response
+
 ## 1.5.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
