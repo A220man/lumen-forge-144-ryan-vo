@@ -14,26 +14,18 @@ from app.core.config import settings
 from app.models.source import Source, SourceCreate, SourceUpdate, SourceType, SourceTestResult
 
 
-# Private IP ranges to block for SSRF protection
-PRIVATE_RANGES = [
-    ipaddress.IPv4Network("10.0.0.0/8"),
-    ipaddress.IPv4Network("172.16.0.0/12"),
-    ipaddress.IPv4Network("192.168.0.0/16"),
-    ipaddress.IPv4Network("127.0.0.0/8"),
-    ipaddress.IPv4Network("169.254.0.0/16"),
-    ipaddress.IPv6Network("::1/128"),
-    ipaddress.IPv6Network("fc00::/7"),
-    ipaddress.IPv6Network("fe80::/10"),
-]
-
-
 def is_private_ip(ip: str) -> bool:
-    """Check if an IP address is in private/reserved ranges."""
+    """Check whether an address is outside globally routable space.
+
+    Source fetches must only reach public addresses, so every non-global
+    address (private, loopback, link-local, CGNAT, documentation, multicast,
+    reserved) is treated as unsafe.
+    """
     try:
         ip_obj = ipaddress.ip_address(ip)
-        return any(ip_obj in network for network in PRIVATE_RANGES)
     except ValueError:
         return True  # Invalid IP, treat as unsafe
+    return not ip_obj.is_global
 
 
 def resolve_hostname_safe(hostname: str) -> List[str]:
